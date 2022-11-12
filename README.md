@@ -22,3 +22,19 @@ You are equipped with an laptop which can be used and interacted with by the pla
 - [ ] Game Menu & Settings
 - [ ] Savegames
 - [ ] Add website implementation to run within browsers
+
+### Installation:
+#### Linux:
+```
+git clone https://github.com/Gymaltona-Informatik-S1-2022/Inan-Textadvanture/
+cd Inan-Textadvanture
+python main.py
+```
+#### Windows:
+1. Download the repo as an archive
+2. Unzip it to a folder
+3. Open the cmd
+```
+cd %PathToFolder%
+python main.py
+```
