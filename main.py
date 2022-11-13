@@ -31,7 +31,7 @@ def showStatus():
     print('You see a ' + rooms[currentRoom]['item2'])
   print("---------------------------")
   # Print output if there is one
-  print(f"{Output}")
+  print(f"\n{Output}")
 
 
 
@@ -158,7 +158,7 @@ while True:
 
   # If user types "enter"
   if move[0] == "enter":
-    if len(move) == 1: # Check if user specified an target object
+    if len(move) == 1:
       Output = "You have to specify the object that you want to enter"
     else:
       object = move[1]
@@ -166,43 +166,58 @@ while True:
       if object in objectsInRoom: # Check if enterable object exists in room
         Output = f"The room has {object}"
         Destination = rooms[currentRoom]["EnterableObjectDestination"]
-        chance = fifty_fifty()
+        chance = fifty_fifty() # Create a 50/50 chance if user can enter the object
         if chance == 1:
-          currentRoom = Destination
+          currentRoom = Destination # if user is lucky let him enter the object
         else:
           Output = f"Sadly you were out of luck and failed entering {object}"
 
+  # If user types "start"
   if move[0] == "start":
-    if len(move) == 1:
+    if len(move) == 1:  # Check if user specified an target device
       Output = "You have to specify the device that you want to start"
     else:
+      # Start the specified device
       device = move[1]
       startDevice(device)
 
+  # If user types "open"
   if move[0] == "open":
-    if len(move) == 1:
+    if len(move) == 1: # Check if user specified door to open
       Output = "You have to specify the door that you want to open"
     else:
       door = move[1]
-      if door in rooms[currentRoom]:
-        whichDoor = rooms[currentRoom]["door"]
-        if "key" in doors[whichDoor]:
-          KeyNeeded = doors[whichDoor]["key"]
-          if KeyNeeded in inventory:
-            Output = openDoor(currentRoom, whichDoor)
+      if door in rooms[currentRoom]: # check if current room has a door
+        whichDoor = rooms[currentRoom]["door"] # Store the attributes of the door in a list
+        if "key" in doors[whichDoor]: # Check if door needs a key
+          KeyNeeded = doors[whichDoor]["key"] # store key-name in a variable
+          if KeyNeeded in inventory: # Check if suer has the specific key
+            Output = openDoor(currentRoom, whichDoor) # Open the door
           else:
             Output = f"You need the {KeyNeeded} to open the door"
         else:
-          Output = openDoor(currentRoom, whichDoor)
+          Output = openDoor(currentRoom, whichDoor) # Open door if it doesnt need a key
       else:
         Output = "There is no door in this area"
 
+  # If user types "info"
+  if move[0] == "info":
+    if len(move) == 1: # Check if user specified item
+      Output = "You have to specify the item that you want info for"
+    else:
+      item = move[1]
+      if item in inventory: # Check if user has item in inventory
+        Output = getinfo(item) # Get info of item
+      else: 
+        Output = f"You dont have {item} in your inventory"
+
+  # If user types "help"
   if move[0] == "help":
-    Output = showInstructions()
+    Output = showInstructions() # Show user game instructions
 
 
-
+  # If user types "exit"
   if move[0] == 'exit':
     words = "Exiting..."
-    typingEffect(words, 0.05)
-    sys.exit("")
+    typingEffect(words, 0.05) # Display exit message with typing effect
+    sys.exit("") # Exit program
