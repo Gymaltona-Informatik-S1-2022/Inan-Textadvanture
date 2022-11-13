@@ -1,5 +1,7 @@
 rooms = {
 
+
+            # Ground Level Outside
             'Building Entrance' : { 
                   'south' : 'Park',
                   'east'  : 'Eastern side',
@@ -19,23 +21,22 @@ rooms = {
                   'messageRead' : 0
                 },
             'Playround' : {
-                  'south' : 'Building Entrance',
-                  'east'  : 'Playground Window',
+                  'east' : 'Building Entrance',
+                  'north'  : 'Playground Window',
                   'item'  : 'matchbox',
-                  'message' : 'You are in the middle of the small playground on the left side.\nThere is a small window on the side of the building east of you, light seems to shine out of it.',
+                  'message' : 'You are in the middle of the small playground on the left side.\nThere is a small window a bit further infront of you, light seems to shine out of it.',
                   'messageRead' : 0
                 },
-            'Playground Window' : {
-                  'west' : 'Playround',
-                  'message' : 'The window is infront of you.\nYou can try to enter it, you might get lucky',
-                  'messageRead' : 0,
-                  'EnterableObject'  : 'window',
-                  'EnterableObjectDestination' : 'Basement Window'
-                },
-            'Basement Window' : {
-                  'message' : 'WOOOMS!>>> You climbed into the window and fell down on the floor.\nYou stand up and look around you, everywhere is nothing but darkness...',
+
+            'Park' : {
+                  'north' : 'Building Entrance',
+                  'west'  : 'Playground',
+                  'east'  : 'Street',
+                  'item'  : 'flashlight',
+                  'message' : 'You are in the front park of the Gymnasium Altona. You can hear a car pass by at the street every now and then...\n',
                   'messageRead' : 0
-                }, 
+                },
+
             'Entrance' : {
                   'south'  : 'Building Entrance',
                   'message' : 'The big old door of the entrance towers up infront of you. The inside of the building looks dark and scary..',
@@ -43,35 +44,58 @@ rooms = {
                   'messageRead' : 0
                 },     
 
+            'Playground Window' : {
+                  'south' : 'Playround',
+                  'message' : 'The window is infront of you.\nYou can try to enter it, you might get lucky',
+                  'messageRead' : 0,
+                  'EnterableObject'  : 'window',
+                  'EnterableObjectDestination' : 'Basement Window'
+                },
+
+            # Ground Level Inside
             'Entrance Hall' : {
                   'west'  : 'Dining Room',
                   'message' : 'You are in the foyer',
                   'messageRead' : 0
-            }
+            },
+
+
+            # Basement Level
+
+            'Basement Window' : {
+                  'north' : 'Server Room Entrance',
+                  'message' : 'WOOOMS! You climbed into the window and fell down on the floor.\nYou stand up and look around you, everywhere is darkness except a small white light flickering on the other side of the room...',
+                  'messageRead' : 0
+                }, 
+            
 
          }
 
-items = {
-            'knife' : { 
-                "use" : "hit cut",
-                "damage" : 5
-            },
-
-            'key' : { 
-                "use" : "",
-            },      
-
+items = {    
             'letter' : {
                 "use" : "read",
+                "info": "The item letter has the usage 'read' and you can read it with either 'read letter' or 'use letter read'"
             },
 
             'laptop' : {
-                "use" : "start"
+                "use" : "start",
+                "info" : "The laptop has the usage 'start' and you can start it with either 'start laptop' or 'use laptop start'"
+            },
+
+            'flashlight' : {
+                "use" : "start",
+                "info" : "The flashlight has the usage 'start' and you can start it with either 'start flashlight' or 'use flashlight start'"
+            },           
+
+            'matchbox'  :  {
+                "use" : "light",
+                "info" : ""
             },
 
             'entrancekey' : {
                 "use" : "open",
-                "doors" : "Entrance"
+                "doors" : "Entrance",
+                "info"  : "The entrancekey can be used to open the Entrance door"
             }
 }
 
