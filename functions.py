@@ -24,6 +24,10 @@ def openDoor(currentRoom, whichDoor):
     Output = f"The door to the {Destination} opened, you can now proceed {DestinationDirection} to walk through it."
     return Output
 
+def getinfo(item):
+    Output = items[item]["info"]
+    return Output
+
 def showInstructions():
   #print a main menu and the commands
   print('''
@@ -42,6 +46,9 @@ Commands:
   open [door]
   enter [object]
   start [device]
+  info [item]
+  help
+  exit
 ''')
 
   Output = '''
@@ -57,7 +64,10 @@ Commands:
   use [item] [purpose]
   read [item]
   open [door]
+  enter [object]
   start [device]
-  enter
+  info [item]
+  help
+  exit
 '''
   return Output
