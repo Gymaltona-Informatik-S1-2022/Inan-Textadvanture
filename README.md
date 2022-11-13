@@ -13,6 +13,7 @@ You are equipped with an laptop which can be used and interacted with by the pla
 - open [door]
 - enter [object]
 - start [device]
+- info [item]
 - help
 - exit
 
@@ -20,6 +21,7 @@ You are equipped with an laptop which can be used and interacted with by the pla
 - Base system (Minimap, instructions Page)
 - Rooms
 - Items & usages for items
+- Information about usage of items
 - enterable-objects (such as windows)
 - key-locked doors
 - usable computer for player to get/store info, copy USB flash-drives and control his trojan infected computers
