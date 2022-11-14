@@ -61,17 +61,18 @@ def room_map():
   s = "S"
   vert_line = "|"
   hzt_line = "-- W -- X -- E --"
-  print(north.center(40))
   print("")
-  print(vert_line.center(40))
-  print(n.center(40))
-  print(vert_line.center(40))
-  print(west + hzt_line.center(40 - len(west) * 2) + east)
-  print(vert_line.center(40))
-  print(s.center(40))
-  print(vert_line.center(40))
+  print(north.center(60))
   print("")
-  print(south.center(40))
+  print(vert_line.center(60))
+  print(n.center(60))
+  print(vert_line.center(60))
+  print(west + hzt_line.center(60 - len(west) * 2) + east)
+  print(vert_line.center(60))
+  print(s.center(60))
+  print(vert_line.center(60))
+  print("")
+  print(south.center(60))
   print("")
 
 showInstructions()
