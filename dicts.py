@@ -45,12 +45,12 @@ rooms = {
                 },     
 
             'Playground Window' : {
-                  'south' : 'Playround',
-                  'message' : 'The window is infront of you.\nYou can try to enter it, you might get lucky',
-                  'messageRead' : 0,
-                  'EnterableObject'  : 'window',
-                  'EnterableObjectDestination' : 'Basement Window'
-                },
+                'south' : 'Playround',
+                'message' : 'The window is infront of you.\nYou can try to enter it, you might get lucky',
+                'messageRead' : 0,
+                'EnterableObject'  : 'window',
+                'EnterableObjectDestination' : 'Basement Window'
+            },
 
             # Ground Level Inside
             'Entrance Hall' : {
@@ -63,10 +63,24 @@ rooms = {
             # Basement Level
 
             'Basement Window' : {
-                  'north' : 'Server Room Entrance',
+                  'north' : 'Northern Basement Hallway',
                   'message' : 'WOOOMS! You climbed into the window and fell down on the floor.\nYou stand up and look around you, everywhere is darkness except a small white light flickering on the other side of the room...',
                   'messageRead' : 0
-                }, 
+            }, 
+
+            'Northern Basement Hallway' : {
+                  'south' : 'Basement Window',
+                  'message' : 'You continue along the basement hallway and you can merely see the outline of a door eastern of you',
+                  'door'  : 'StorageroomDoor',
+                  'messageRead' : 0
+            } ,
+
+            'Basement Storage Room'  : {
+                'west' : 'Northern Basement Hallway',
+                'item'  : 'graffitican',
+                'message' : '',
+                'messageRead' : 0
+            }
             
 
          }
@@ -92,6 +106,11 @@ items = {
                 "info" : ""
             },
 
+            'graffitican'  : {
+                "use" : "spray",
+                "info" : "You can use the graffiti can to make street art. Enter 'use graffitican spray' to use it"
+            },
+
             'entrancekey' : {
                 "use" : "open",
                 "doors" : "Entrance",
@@ -104,7 +123,13 @@ doors = {
                 "key" : "entrancekey",
                 "direction" : "north",
                 "destination" : "Entrance Hall"
-            }
+            },
+
+            'StorageroomDoor' : {
+                "direction" : "east",
+                "destination" : "Basement Storage Room",
+                "item"  : "graffitican"
+            }        
 }
 
 filesOnLaptop = {
