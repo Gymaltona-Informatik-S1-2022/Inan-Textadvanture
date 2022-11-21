@@ -3,6 +3,7 @@ from usages import *
 from functions import *
 from dicts import *
 import sys
+import os
 
 # Declare start variables
 Output = ""
@@ -11,6 +12,8 @@ inventory = []
 inventory += ["laptop"]
 # Define Starting room
 currentRoom = 'Building Entrance'
+# InstructionsShown
+InstructionsShown = 0
 
 # function to print the current status to player
 def showStatus():
@@ -23,8 +26,9 @@ def showStatus():
   else:
     print(room['message'])
   # Print the current items inside inventory
-  print('\nInventory : ' + str(inventory))
-  # Print all items in room
+  InventoryMessage = ', '.join(inventory)
+  print('\nInventory : ' + InventoryMessage)
+  # Print all items in room 
   if "item" in rooms[currentRoom]:
     print('You see a ' + rooms[currentRoom]['item'])
   if "item2" in rooms[currentRoom]:
@@ -75,10 +79,13 @@ def room_map():
   print(south.center(60))
   print("")
 
-showInstructions()
-
 # Loop forever (unless exit)
 while True:
+  if InstructionsShown == 0:
+    showInstructions()
+    InstructionsShown = 1
+  else:
+    cls()
   room_map()
   showStatus()
   Error = ""
