@@ -1,6 +1,10 @@
 from time import sleep
 from dicts import *
+import os
 import random
+
+def cls():
+    os.system('cls' if os.name=='nt' else 'clear')
 
 def typingEffect(text, interval):
   for char in text:
