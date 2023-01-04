@@ -11,13 +11,22 @@ def cut(item):
         Output = "You cut with knife"
         return Output
 
-def TakeAction(IntendetUse, item):
+def spray(item, currentRoom):
+    if item == "graffitican":
+        TextToSpray = input("What do you want to spray against the walls?\n")
+        rooms[currentRoom]["message"] += "\nThere is a graffiti with the label " + TextToSpray + " on the walls."
+        Output = f"You sprayed {TextToSpray} against the walls"
+        return Output
+
+def TakeAction(IntendetUse, item, currentRoom):
     if IntendetUse == "read":
         Output = read(item)
     elif IntendetUse == "cut":
         Output = cut(item)
     elif IntendetUse == "start":
         Output = startDevice(item)
+    elif IntendetUse == "spray":
+        Output = spray(item, currentRoom)
     return Output
 
 def startDevice(device):
