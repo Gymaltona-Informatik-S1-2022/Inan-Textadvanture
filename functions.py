@@ -34,7 +34,7 @@ def getinfo(item):
 
 def showInstructions():
   #print a main menu and the commands
-  print('''
+  text = '''
 Text Advanture by Inan Salar
 ========
 
@@ -53,25 +53,8 @@ Commands:
   info [item]
   help
   exit
-''')
-
-  Output = '''
-Text Advanture
-========
-
-Get to the Garden with a key, a knife and a matchbox
-But beware of the monsters!
-
-Commands:
-  go [direction]
-  get [item]
-  use [item] [purpose]
-  read [item]
-  open [door]
-  enter [object]
-  start [device]
-  info [item]
-  help
-  exit
 '''
+  print(text)
+
+  Output = text
   return Output
