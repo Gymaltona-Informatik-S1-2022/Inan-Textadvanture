@@ -4,14 +4,21 @@ from functions import *
 from dicts import *
 import sys
 import os
+import readline
+
+cls() # Clear the screen
+
+#-----------------------------Settings------------------------------------#
+TypingSpeed = 0.02
+currentRoom = 'Building Entrance' # Define Starting room
+#-----------------------------Start Variables-----------------------------#
+
 
 # Declare start variables
 Output = ""
 # Create inventory list and add start items
 inventory = []
 inventory += ["laptop"]
-# Define Starting room
-currentRoom = 'Building Entrance'
 # InstructionsShown
 InstructionsShown = 0
 
@@ -21,7 +28,7 @@ def showStatus():
   print('Your current position is the ' + currentRoom + "\n")
   room = rooms[currentRoom]
   if room['messageRead'] != 1:
-    typingEffect(room["message"], 0.02)
+    typingEffect(room["message"], TypingSpeed)
     room['messageRead'] += 1
   else:
     print(room['message'])
@@ -30,9 +37,7 @@ def showStatus():
   print('\nInventory : ' + InventoryMessage)
   # Print all items in room 
   if "item" in rooms[currentRoom]:
-    print('You see a ' + rooms[currentRoom]['item'])
-  if "item2" in rooms[currentRoom]:
-    print('You see a ' + rooms[currentRoom]['item2'])
+    print('You see a ' + " and a ".join(rooms[currentRoom]['item']))
   print("---------------------------")
   # Print output if there is one
   print(f"\n{Output}")
@@ -59,24 +64,25 @@ def room_map():
     west = rooms[currentRoom]['west']
   except:
     west = ""
-
   # Print the map
   n = "N"
   s = "S"
+  len_WtoE = 9
+
   vert_line = "|"
   hzt_line = "-- W -- X -- E --"
   print("")
-  print(north.center(60))
+  print(north.center(18 + len(west)*2))
   print("")
-  print(vert_line.center(60))
-  print(n.center(60))
-  print(vert_line.center(60))
-  print(west + hzt_line.center(60 - len(west) * 2) + east)
-  print(vert_line.center(60))
-  print(s.center(60))
-  print(vert_line.center(60))
+  print(vert_line.center(18 + len(west)*2))
+  print(n.center(18 + len(west)*2))
+  print(vert_line.center(18 + len(west)*2))
+  print(west + hzt_line.center(20 - len(west) * 2) + east)
+  print(vert_line.center(18 + len(west)*2))
+  print(s.ljust(9 + len(west), " ")[::-1][:-len(s)] + s)
+  print(vert_line.center(18 + len(west)*2))
   print("")
-  print(south.center(60))
+  print(south.center(18 + len(west)*2))
   print("")
 
 # Loop forever (unless exit)
@@ -129,7 +135,7 @@ while True:
           hasUse = hasItem(usages, IntendetUse)
           if hasUse:
             #Output = f"{item} can be used to {IntendetUse}"
-            Output = TakeAction(IntendetUse, item)
+            Output = TakeAction(IntendetUse, item, currentRoom)
 
           else:
             Output = f"{item} can't be used to {IntendetUse}"
@@ -154,15 +160,25 @@ while True:
     # If the current room contains an item, and the item is the one they want to get
     if "item" in rooms[currentRoom] and move[1] in rooms[currentRoom]['item']: 
       inventory += [move[1]] # Add the item to the inventory
-      Output = move[1] + ' got!' # Display output that item was received
+      Output = move[1] + ' got!' + "\n" + items[move[1]]["info"] # Display output that item was received
       del rooms[currentRoom]['item'] # Delete the item from the room so it can't be taken twice
-    elif "item2" in rooms[currentRoom] and move[1] in rooms[currentRoom]['item2']: #add the item to their inventory
-      inventory += [move[1]] # Add the item to the inventory
-      Output = move[1] + ' got!' # Display output that item was received
-      del rooms[currentRoom]['item2'] # Delete the item from the room so it can't be taken twice
     else:
       # If item doesnt exist print an error
       Output = "ERROR: Can\'t get " + move[1] + "! Item doesn't exist"
+
+  if move[0] == "eat":
+    if len(move) == 1:
+      Output = "You have to specify the food that you want to eat"
+    else:
+      food = move[1]
+      if food in inventory:
+        if "food" in items[food]:
+          Output = f"You have eaten the {food}"
+          inventory.remove(food)
+        else:
+          Output = food + " is not eatable"
+      else:
+        Output = f"{food} is not in your inventory"
 
   # If user types "enter"
   if move[0] == "enter":
@@ -170,15 +186,18 @@ while True:
       Output = "You have to specify the object that you want to enter"
     else:
       object = move[1]
-      objectsInRoom = rooms[currentRoom]["EnterableObject"]
-      if object in objectsInRoom: # Check if enterable object exists in room
-        Output = f"The room has {object}"
-        Destination = rooms[currentRoom]["EnterableObjectDestination"]
-        chance = fifty_fifty() # Create a 50/50 chance if user can enter the object
-        if chance == 1:
-          currentRoom = Destination # if user is lucky let him enter the object
-        else:
-          Output = f"Sadly you were out of luck and failed entering {object}"
+      try:
+        objectsInRoom = rooms[currentRoom]["EnterableObject"]
+        if object in objectsInRoom: # Check if enterable object exists in room
+          Output = f"The room has {object}"
+          Destination = rooms[currentRoom]["EnterableObjectDestination"]
+          chance = fifty_fifty() # Create a 50/50 chance if user can enter the object
+          if chance == 1:
+            currentRoom = Destination # if user is lucky let him enter the object
+          else:
+            Output = f"Sadly you were out of luck and failed entering {object}"
+      except:
+        Output = "This room has no enterable object"
 
   # If user types "start"
   if move[0] == "start":
