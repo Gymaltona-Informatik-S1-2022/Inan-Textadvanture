@@ -1,15 +1,49 @@
+import time
 from time import sleep
 from dicts import *
 import os
 import random
+import sys
 
 def cls():
     os.system('cls' if os.name=='nt' else 'clear')
+
+def endgame(starttime, inventory):
+  cls()
+  endtime = time.time()
+  FinalTime = round(endtime - starttime) # Starttime substracted from Current time to get total time played
+  print(f"""
+You played for {str(round((FinalTime/60),2))} minutes
+
+achievements:
+""")
+  for key, value in achievements.items():
+    print(key, ": ", end="")
+    if value:
+      print("\u2611")
+    else:
+      print("\u2612")
+  print("\n")
+  input("Press ENTER to close the game")
+  sys.exit("")
+
 
 def typingEffect(text, interval):
   for char in text:
     sleep(interval)
     print(char, end='', flush=True)
+
+def add_student(name, student_id, grades, absences):
+  database[student_id] = {"name": name, "grades": grades, "absences": absences}
+
+def update_grade(student_id, class_name, new_grade):
+  database[student_id]["grades"][class_name] = new_grade
+
+def update_absences(student_id, new_absences):
+  database[student_id]["absences"] = new_absences
+
+def delete_student(student_id):
+  del database[student_id]
 
 def fifty_fifty():
     "Return 0 or 1 with 50% chance for each"
@@ -39,18 +73,28 @@ Text Advanture by Inan Salar
 ========
 
 You are a student at the Gymnasium Altona. Your Abitur Exams are soon and your goal is to break into the Building,
-steal the USB of the principle and make a copy of it.
-But beware of the janitor!
+steal the USB of the principle and make a copy of it. On the way you can try to get into the school's server
+and change the grades of you and your buddies.
+
+Good luck!
 
 Commands:
   go [direction]
+  up/down (move up/down the stairs)
   get [item]
   use [item] [purpose]
   read [item]
   open [door]
+  drop [item]
   enter [object]
   start [device]
+  throw [item]
+  unlock [object]
+  drop [item]
+  drink [item]
+  eat [item]
   info [item]
+  time
   help
   exit
 '''
