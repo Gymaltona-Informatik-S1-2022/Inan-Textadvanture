@@ -4,7 +4,41 @@ from dicts import *
 def read(item):
     if item == "letter":
         Output = "You read the content of the letter..\n\n\nThis is a very important message"
-        return Output
+    elif item == "worksheet":
+        Output = """
+You read the content of the worksheet..\n\n
+Aufgabenblatt: Mathematik
+
+a) Berechne folgende aufgaben
+1. Berechne x, wenn x + 3 = 4".
+2. Berechne x, wenn 5x - 3 = 23.
+3. Berechne y, wenn 2y + 3 = 11.
+4. Berechne y, wenn 5x - 2 = 13.
+
+b) Addiere all die vorherigen Lösungen und multipliziere sie mal 94,1
+
+"""
+    elif item == "classbook":
+        Output = """
+You read the content of the classbook..\n\n
+Unterricht: Deutsch
+Datum: 12.01.2010
+
+Anwesenheitsliste
+
+Name          Anwesenheit
+---------------------------
+Anna          Anwesend
+Berta         Anwesend
+Charlotte     Abwesend
+Dieter        Anwesend
+Erika         Anwesend
+Frank         Abwesend
+Greta         Abwesend
+Hans          Anwesend
+Ida           Anwesend
+"""
+    return Output
 
 def cut(item):
     if item == "knife":
