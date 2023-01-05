@@ -29,9 +29,9 @@ You are equipped with an laptop which can be used and interacted with by the pla
 ### Roadmap:
 - [ ] Add a combat-system
 - [ ] Add an NPC/Enemy
-- [ ] Add more items
-- [ ] Add all rooms needed for the story
-- [ ] Add some more riddles
+- [X] Add more items
+- [X] Add all rooms needed for the story
+- [X] Add some more riddles
 - [ ] Game Menu & Settings
 - [ ] Savegames
 - [ ] Add website implementation to run within browsers
