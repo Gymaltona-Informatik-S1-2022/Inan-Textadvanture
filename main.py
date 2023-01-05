@@ -21,11 +21,15 @@ inventory = []
 inventory += ["laptop"]
 # InstructionsShown
 InstructionsShown = 0
+# Current floor
+currentFloor = 0
+# Last Room
+lastRoom = ""
 
 # function to print the current status to player
 def showStatus():
-  print('---------------------------')
-  print('Your current position is the ' + currentRoom + "\n")
+  print('\033[96m---------------------------', colors.reset)
+  print('Your current position is the ' + colors.fg.orange + currentRoom + colors.reset + "\n")
   room = rooms[currentRoom]
   if room['messageRead'] != 1:
     typingEffect(room["message"], TypingSpeed)
@@ -34,11 +38,11 @@ def showStatus():
     print(room['message'])
   # Print the current items inside inventory
   InventoryMessage = ', '.join(inventory)
-  print('\nInventory : ' + InventoryMessage)
+  print('\n\033[33mInventory: ' + colors.reset + InventoryMessage,)
   # Print all items in room 
   if "item" in rooms[currentRoom]:
     print('You see a ' + " and a ".join(rooms[currentRoom]['item']))
-  print("---------------------------")
+  print('\033[96m---------------------------', colors.reset)
   # Print output if there is one
   print(f"\n{Output}")
 
@@ -120,6 +124,17 @@ while True:
       else:
         Output = f"You dont have {item}"
 
+  if move[0] == "unlock":
+    object = move[1]
+    Output = input("Please enter the 4 digit pin for the safe\n")
+    if Output != "1882":
+      Output = "Safe didn't open"
+    else:
+      Output = "Safe opened"
+      rooms[currentRoom]["message"] = rooms[currentRoom]["message"][:69]
+      rooms[currentRoom]["item"] += ["serverroomkey"]
+
+
   # Define what happens when user uses the function "use"  
   if move[0] == 'use':
     item = move[1]
@@ -150,7 +165,9 @@ while True:
     #check that they are allowed wherever they want to go
     if move[1] in rooms[currentRoom]:
       #set the current room to the new room
+      lastRoom = currentRoom
       currentRoom = rooms[currentRoom][move[1]]
+      rooms["Stairs"]["south"] = lastRoom
     #there is no door (link) to the new room
     else:
         print('You can\'t go that way!')
@@ -179,6 +196,20 @@ while True:
           Output = food + " is not eatable"
       else:
         Output = f"{food} is not in your inventory"
+  
+  if move [0] == "drink":
+    if len(move) == 1:
+      Output = "You have to specify the drink that you want to drink"
+    else:
+      drink = move[1]
+      if drink in inventory:
+        if "drink" in items[drink]:
+          Output = f"You have drunken the {drink}"
+          inventory.remove(drink)
+        else:
+          Output = drink + " is not drinkable"
+      else:
+        Output = f"{drink} is not in your inventory"
 
   # If user types "enter"
   if move[0] == "enter":
@@ -194,6 +225,10 @@ while True:
           chance = fifty_fifty() # Create a 50/50 chance if user can enter the object
           if chance == 1:
             currentRoom = Destination # if user is lucky let him enter the object
+            try:
+              currentFloor = rooms[currentRoom]["newfloorlevel"]
+            except:
+                i = 1
           else:
             Output = f"Sadly you were out of luck and failed entering {object}"
       except:
@@ -211,21 +246,29 @@ while True:
   # If user types "open"
   if move[0] == "open":
     if len(move) == 1: # Check if user specified door to open
-      Output = "You have to specify the door that you want to open"
+      Output = "You have to specify the object that you want to open"
     else:
-      door = move[1]
-      if door in rooms[currentRoom]: # check if current room has a door
-        whichDoor = rooms[currentRoom]["door"] # Store the attributes of the door in a list
-        if "key" in doors[whichDoor]: # Check if door needs a key
-          KeyNeeded = doors[whichDoor]["key"] # store key-name in a variable
-          if KeyNeeded in inventory: # Check if suer has the specific key
-            Output = openDoor(currentRoom, whichDoor) # Open the door
+      if move[1] == "door":
+        door = move[1]
+        if door in rooms[currentRoom]: # check if current room has a door
+          whichDoor = rooms[currentRoom]["door"] # Store the attributes of the door in a list
+          if "key" in doors[whichDoor]: # Check if door needs a key
+            KeyNeeded = doors[whichDoor]["key"] # store key-name in a variable
+            if KeyNeeded in inventory: # Check if suer has the specific key
+              Output = openDoor(currentRoom, whichDoor) # Open the door
+            else:
+              Output = f"You need the {KeyNeeded} to open the door"
           else:
-            Output = f"You need the {KeyNeeded} to open the door"
+            Output = openDoor(currentRoom, whichDoor) # Open door if it doesnt need a key
         else:
-          Output = openDoor(currentRoom, whichDoor) # Open door if it doesnt need a key
+          Output = "There is no door in this area"
+      elif move[1] == "lunchbox":
+        if "lunchbox" in inventory:
+          Output = "You open the lunchbox and see a dirty sandwhich full of mold"
+        else:
+          Output = "You don't have the item lunchbox"  
       else:
-        Output = "There is no door in this area"
+        Output = f"You can't open a {move[1]}"
 
   # If user types "info"
   if move[0] == "info":
@@ -237,6 +280,36 @@ while True:
         Output = getinfo(item) # Get info of item
       else: 
         Output = f"You dont have {item} in your inventory"
+
+  if move[0] == "up":
+    if currentRoom == "Stairs":
+      if currentFloor == -1:
+        currentRoom = "Ground Hallway"
+        currentFloor += 1
+        Output = "You walked up the stairs"
+      elif currentFloor == 0:
+        currentRoom = "nothing"
+        currentFloor += 1
+        Output = "You walked up the stairs"
+      else:
+        Output = "You cant go up here"
+    else:
+      Output = "You cant go up here"
+
+  if move[0] == "down":
+    if currentRoom == "Stairs":
+      if currentFloor == 0:
+        currentRoom = "Eastern Basement Hallway"
+        currentFloor -= 1
+        Output = "You walked down the stairs"
+      elif currentFloor == 1:
+        currentRoom = "Ground Hallway"
+        currentFloor -= 1
+        Output = "You walked down the stairs"
+      else:
+        Output = "You cant go down here"
+    Output = "You cant go down here"
+
 
   # If user types "help"
   if move[0] == "help":
