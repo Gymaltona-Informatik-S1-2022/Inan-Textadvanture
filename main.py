@@ -13,7 +13,7 @@ TypingSpeed = 0.02
 currentRoom = 'Building Entrance' # Define Starting room
 #-----------------------------Start Variables-----------------------------#
 
-
+timer_start()
 # Declare start variables
 Output = ""
 # Create inventory list and add start items
@@ -25,10 +25,14 @@ InstructionsShown = 0
 currentFloor = 0
 # Last Room
 lastRoom = ""
+# Variables to prevent glitches
+drawers = False
+WindowShattered = False
+closet = False
 
 # function to print the current status to player
 def showStatus():
-  print('\033[96m---------------------------', colors.reset)
+  print('\033[96m------------Room Info---------------', colors.reset)
   print('Your current position is the ' + colors.fg.orange + currentRoom + colors.reset + "\n")
   room = rooms[currentRoom]
   if room['messageRead'] != 1:
@@ -41,8 +45,9 @@ def showStatus():
   print('\n\033[33mInventory: ' + colors.reset + InventoryMessage,)
   # Print all items in room 
   if "item" in rooms[currentRoom]:
-    print('You see a ' + " and a ".join(rooms[currentRoom]['item']))
-  print('\033[96m---------------------------', colors.reset)
+    if rooms[currentRoom]["item"] != []:
+      print('You see a ' + " and a ".join(rooms[currentRoom]['item']))
+  print('\033[96m-------------Output-----------------', colors.reset)
   # Print output if there is one
   print(f"\n{Output}")
 
@@ -128,11 +133,30 @@ while True:
     object = move[1]
     Output = input("Please enter the 4 digit pin for the safe\n")
     if Output != "1882":
-      Output = "Safe didn't open"
+      Output = "Safe didn't open. Look around closely in the previous rooms, maybe you can find a hint.\n"
     else:
-      Output = "Safe opened"
+      Output = "Safe opened\nIt would be smart to not just steal the things, but bring them back here after you are done."
+      achievements["Unlocked safe   "] = True
       rooms[currentRoom]["message"] = rooms[currentRoom]["message"][:69]
-      rooms[currentRoom]["item"] += ["serverroomkey"]
+      if "item" in rooms[currentRoom]:
+        rooms[currentRoom]["item"] += ["serverroomkey"]
+      else:
+        rooms[currentRoom]["item"] = ["serverroomkey"]
+  
+  if move[0] == "drop":
+    if len(move) == 1:
+      Output = "You have to specify an item to drop"
+    else:
+      item = move[1]
+      try:
+        inventory.remove(item)
+        try:
+          rooms[currentRoom]["item"] += [item]
+        except:
+          rooms[currentRoom]["item"] = [item]
+        Output = f"You dropped the {item}"
+      except:
+        Output = f"You dont have {item} in your inventory"
 
 
   # Define what happens when user uses the function "use"  
@@ -150,7 +174,7 @@ while True:
           hasUse = hasItem(usages, IntendetUse)
           if hasUse:
             #Output = f"{item} can be used to {IntendetUse}"
-            Output = TakeAction(IntendetUse, item, currentRoom)
+            Output = TakeAction(IntendetUse, item, currentRoom, inventory)
 
           else:
             Output = f"{item} can't be used to {IntendetUse}"
@@ -178,10 +202,10 @@ while True:
     if "item" in rooms[currentRoom] and move[1] in rooms[currentRoom]['item']: 
       inventory += [move[1]] # Add the item to the inventory
       Output = move[1] + ' got!' + "\n" + items[move[1]]["info"] # Display output that item was received
-      del rooms[currentRoom]['item'] # Delete the item from the room so it can't be taken twice
+      rooms[currentRoom]['item'].remove(move[1]) # Delete the item from the room so it can't be taken twice
     else:
       # If item doesnt exist print an error
-      Output = "ERROR: Can\'t get " + move[1] + "! Item doesn't exist"
+      Output = "Can\'t get " + move[1] + "! Item doesn't exist in this room"
 
   if move[0] == "eat":
     if len(move) == 1:
@@ -220,17 +244,19 @@ while True:
       try:
         objectsInRoom = rooms[currentRoom]["EnterableObject"]
         if object in objectsInRoom: # Check if enterable object exists in room
-          Output = f"The room has {object}"
           Destination = rooms[currentRoom]["EnterableObjectDestination"]
           chance = fifty_fifty() # Create a 50/50 chance if user can enter the object
-          if chance == 1:
-            currentRoom = Destination # if user is lucky let him enter the object
-            try:
-              currentFloor = rooms[currentRoom]["newfloorlevel"]
-            except:
-                i = 1
+          if currentRoom == "Playground Window":
+            if chance == 1:
+              currentRoom = Destination # if user is lucky let him enter the object
+              try:
+                currentFloor = rooms[currentRoom]["newfloorlevel"]
+              except:
+                  i = 1
+            else:
+              Output = f"Sadly you were out of luck and failed entering {object}"
           else:
-            Output = f"Sadly you were out of luck and failed entering {object}"
+            currentRoom = Destination # let the user enter the object
       except:
         Output = "This room has no enterable object"
 
@@ -241,7 +267,7 @@ while True:
     else:
       # Start the specified device
       device = move[1]
-      startDevice(device)
+      startDevice(device, currentRoom, inventory)
 
   # If user types "open"
   if move[0] == "open":
@@ -267,6 +293,32 @@ while True:
           Output = "You open the lunchbox and see a dirty sandwhich full of mold"
         else:
           Output = "You don't have the item lunchbox"  
+      elif move[1] == "closet":
+        if currentRoom == "Classroom":
+          if closet == False:
+            closet = True
+            Output = "You open the closet of the classroom and in it are several encyclopedias aswell as a quite expensive looking watch"
+            try: 
+              rooms["Classroom"]["item"] += ["encyclopedia","watch"]
+            except:
+              rooms["Classroom"]["item"] = ["encyclopedia","watch"]
+          else:
+            Output = "You open the closet of the classroom but nothing interesting is inside it"
+        else:
+          Output = "There is no closet in this room"
+      elif move[1] == "drawers":
+        if currentRoom == "Computer Room":
+          if drawers == False:
+            drawers = True
+            Output = "You open the drawers and in one of them lays a paper with text written on it"
+            if "item" in rooms["Computer Room"]:
+              rooms["Computer Room"]["item"] += ["paper"]
+            else:
+              rooms["Computer Room"]["item"] = ["paper"]
+          else:
+            Output = "You open the drawers but nothing is inside"
+        else:
+          Output = "There are no drawers in this room"
       else:
         Output = f"You can't open a {move[1]}"
 
@@ -309,7 +361,48 @@ while True:
       else:
         Output = "You cant go down here"
     Output = "You cant go down here"
+  
+  if move[0] == "throw":
+    if currentRoom == "Eastern side":
+      if WindowShattered == False:
+        if len(move) == 1:
+          Output = "You have to specify an item to throw"
+        else:
+          item = move[1]
+          if "throwable" in items[item]:
+            inventory.remove(item)
+            WindowShattered = True
+            rooms["Eastern side"]["EnterableObject"] = "window"
+            Output = f"You threw the {item} at the window and it shattered.\nYou can now enter it\n"
+            rooms["Eastern side"]["message"] = "You go along the side of the building and you see an open shattered window a bit further up the wall, probably leading to a classroom."
+          else:
+            Output = f"You cannot throw a {item}"
+      else:
+        Output = "You can't throw at anything in this room"
+    else:
+      Output = "There is nothing to throw at in this room"
 
+  if move[0] == "burn":
+    if len(move) == 1:
+      Output = "You have to specify an item to burn"
+    else:
+      item = move[1]
+      if item in inventory:
+        for i in inventory:
+          if items[i].get("use") == "burn":
+            if items[item].get("burnable") == True:
+              Output = f"You burned {item}"
+              inventory.remove(item)
+            else:
+              Output = f"You cant burn {item}"
+            break
+          else:
+            Output = "You dont have any item in your inventory to burn something with."
+      else:
+        Output = f"You dont have {item} in your inventory"
+      
+  if move[0] == "time":
+    Output = GetTime("watch", inventory)
 
   # If user types "help"
   if move[0] == "help":
