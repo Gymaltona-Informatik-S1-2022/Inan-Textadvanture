@@ -5,20 +5,19 @@ rooms = {
             'Building Entrance' : { 
                 'south' : 'Park',
                 'east'  : 'Eastern side',
-                'west'  : 'Playround',
+                'west'  : 'Playground',
                 'north' : 'Entrance',
                 'message' : 'You stand infront of the big building entrance, the night is dark and silent...\n',
                 'messageRead' : 0,
-                'item'  : ['letter',"entrancekey"],
                 },
 
             'Eastern side' : {
-                  'north' : 'Hall',
-                  'east'  : 'Living Room',
-                  'message' : '',
+                  'west'  : 'Building Entrance',
+                  'EnterableObjectDestination' : 'Classroom',
+                  'message' : 'You go along the side of the building and you see a window a bit further up the wall, probably leading to a classroom.\nTip: You might have something to break it..\n',
                   'messageRead' : 0
             },
-            'Playround' : {
+            'Playground' : {
                   'east' : 'Building Entrance',
                   "north" : "Playground Window",
                   "west"  : "Janitor stash",
@@ -30,7 +29,7 @@ rooms = {
             'Park' : {
                   'north' : 'Building Entrance',
                   'item'  : ["stone"],
-                  'message' : 'You are in the front park of the Gymnasium Altona. You can hear a car pass by at the street every now and then...\n',
+                  'message' : 'You are in the front park of the Gymnasium Altona. You can hear a car pass by at the street every now and then...\nThere is a bike with a crusty old bikelock on it, you can use it to escape the scene,\nbut you will need something to force it open with.\n',
                   'messageRead' : 0
                 },
 
@@ -42,7 +41,7 @@ rooms = {
                 },     
 
             'Playground Window' : {
-                'south' : 'Playround',
+                'south' : 'Playground',
                 'message' : 'The window is infront of you.\nYou can try to enter it, you might get lucky.\n',
                 'messageRead' : 0,
                 'EnterableObject'  : 'window',
@@ -51,7 +50,7 @@ rooms = {
 
             "Janitor stash" : {
                 "east" : "Playground",
-                "item" : ["boltcutters"],
+                "item" : ["boltcutters","entrancekey"],
                 "message" : "You open the slightly open door and find yourself in this dark and narrow room full of tools.\n",
                 "messageRead" : 0
             },
@@ -69,19 +68,26 @@ rooms = {
                 "west" : "Entrance Hall",
                 "north" : "Stairs",
                 "south" : "Classroom",
-                'message' : 'You go down the floor of the 5th graders, you remember the times\nWhen you had to walk through here everyday and endure the loud noises of the kids...\n',
+                "east" : "Boys Bathroom",
+                'message' : 'You go down the floor of the 5th graders, you remember the times\nwhen you had to walk through here everyday and endure the loud noises of the kids...\n',
                 'messageRead' : 0
+            },
+
+            "Computer Room" : {
+                "north" : "Office Hallway",
+                "message": "You entered the computer room and you look around. There is a PC with a monitor attached and next to it are some drawers.\nYou can try to open the drawers.\n",
+                "messageRead" : 0
             },
 
             "Classroom" : {
                 "north" : "Ground Hallway",
-                "message" : "",
+                "message" : "You stand in the middle of this goofy classroom with pictures of students on the walls\nand those small little chairs that remind you of your early days in this school.\nThere is a closet next to the teachers desk, you can try to open it.\n",
                 "item" : ["lunchbox"],
                 "messageRead" : 0
             },
 
             'Office Hallway' : {
-                'south' : 'Ground level computerroom',
+                'south' : 'Computer Room',
                 'north' : 'Teachers Room',
                 'west'  : 'Secretary Room',
                 'east'  : 'Entrance Hall',
@@ -91,7 +97,7 @@ rooms = {
 
             "Secretary Room" : {
                 "east" : "Office Hallway",
-                "item" : ["classbook"],
+                "item" : ["classbook","letter"],
                 "message" : "There is a desk with a bunch of papers and a mounted telephone.\nHere you always went when you wanted to fake a illness to go home from school.\n",
                 "messageRead" : 0
             },
@@ -113,6 +119,13 @@ rooms = {
             "Stairs" : {
                 "south" : "",
                 "message": "You can walk down/up on these stairs with the commands 'down' and 'up'\n",
+                "messageRead" : 0
+            },
+
+            "Boys Bathroom" : {
+                "west" : "Ground Hallway",
+                "item" : ["lighter", "weedbaggy"],
+                "message" : "You enter the boys bathroom and it smells awfully like weed.\nEverything is dirty and toilet paper was thrown around.\n",
                 "messageRead" : 0
             },
 
@@ -144,7 +157,7 @@ rooms = {
 
             "Server Room" : {
                 "south" : "Northern Basement Hallway",
-                "message" : "You see the big server light flickering, and right below it there stands the main computer which is connected to all the systems.\n",
+                "message" : "You see the big server light flickering, and right below it there stands the main computer which is connected to all the systems.\nYou can start the computer and try to get into it.\n",
                 "messageRead" : 0
             },
 
@@ -159,7 +172,7 @@ rooms = {
             "Saftladen" : {
                 "north" : "Eastern Basement Hallway",
                 "west"  : "Saftladen Kitchen",
-                "message" : "You entered the small shop of the school in which the students buy their food, it reminds you of the days you were a 5th grader and went here every break.\n",
+                "message" : "You entered the small shop of the school in which the students buy their food.\nIt reminds you of the days you were a 5th grader and went here every break.\n",
                 "messageRead" : 0
             },
 
@@ -176,11 +189,30 @@ rooms = {
 items = {    
             'letter' : {
                 "use" : "read",
+                "burnable": True,
                 "info": "The item letter has the usage 'read' and you can read it with either 'read letter' or 'use letter read'"
+            },
+            
+            "paper" : {
+                "use" : "read",
+                "burnable": True,
+                "info" : "The item paper has the usage 'read' and you can read it with either 'read paper' or 'use paper read'"
+            },
+
+            "encyclopedia" : {
+                "use" : "read",
+                "burnable": True,
+                "info" : "The item encyclopedia has the usage 'read' and you can read it with either 'read encyclopedia' or 'use encyclopedia read'"
+            },
+
+            "watch" : {
+                "use" : "time",
+                "info" : "The item watch has the usage time and you can look up the time with either 'time' or 'use watch time'"
             },
 
             "worksheet" : {
                 "use" : "read",
+                "burnable": True,
                 "info": "The item worksheet has the usage 'read' and you can read it with either 'read worksheet' or 'use worksheet read'"
             },
 
@@ -188,25 +220,29 @@ items = {
                 "info" : "The item lunchbox can be opened with 'open lunchbox'"
             },
 
-
             'laptop' : {
                 "use" : "start",
                 "info" : "The laptop has the usage 'start' and you can start it with either 'start laptop' or 'use laptop start'"
             },
 
-            'flashlight' : {
-                "use" : "start",
-                "info" : "The flashlight has the usage 'start' and you can start it with either 'start flashlight' or 'use flashlight start'"
-            },           
+            "lighter" : {
+                "use" : "burn",
+                "info" : "The lighter can be used to burn items with 'burn [item]'"
+            },
+
+            "weedbaggy" : {
+                "burnable" : True,
+                "info" : "This is just a weed baggy"
+            }, 
 
             'matchbox'  :  {
-                "use" : "light",
-                "info" : ""
+                "use" : "burn",
+                "info" : "The matchbox can be used to burn items with 'burn [item]'"
             },
 
             'graffitican'  : {
                 "use" : "spray",
-                "info" : "You can use the graffiti can to make street art. Enter 'use graffitican spray' to use it"
+                "info" : "You can use the graffitican to make street art. Enter 'use graffitican spray' to use it"
             },
 
             'entrancekey' : {
@@ -233,11 +269,23 @@ items = {
 
             "classbook" : {
                 "use" : "read",
+                "burnable": True,
                 "info" : "The item classbook has the usage 'read' and you can read it with either 'read classbook' or 'use classbook read'",
             },
 
+            "stone" : {
+                "throwable" : True,
+                "info" : "You can use the item stone to throw at a window with the command 'throw stone'"
+            },
+
+            "boltcutters" : {
+                "use" : "cut",
+                "info" : "You can use the boltcutters to cut a lock with 'use boltcutters cut'",
+            },
+
             "usbstick" : {
-                ""
+                "burnable": True,
+                "info" : "You can copy the usbstick with your laptop. You can start it with 'start laptop'"
             }
 }
 
@@ -255,7 +303,7 @@ doors = {
             },
 
             "ServerRoomDoor" : {
-                "key" : "ServerRoomKey",
+                "key" : "serverroomkey",
                 "direction" : "north",
                 "destination" : "Server Room"
             },
@@ -266,24 +314,95 @@ doors = {
             }
 }
 
+grades_txt = """
+Maria Schmidt - Mathematik: 2, Deutsch: 2, Englisch: 3
+Hans Müller - Mathematik: 3, Deutsch: 3, Englisch: 4
+Lena Weber - Mathematik: 4, Deutsch: 4, Englisch: 4
+Max Schmitz - Mathematik: 3, Deutsch: 4, Englisch: 4
+Sophie Bauer - Mathematik: 4, Deutsch: 3, Englisch: 3
+Sarah Keller - Mathematik: 3, Deutsch: 2, Englisch: 2
+Tom Weber - Mathematik: 2, Deutsch: 2, Englisch: 3
+Anna Schmidt - Mathematik: 4, Deutsch: 4, Englisch: 5
+Felix Müller - Mathematik: 4, Deutsch: 5, Englisch: 4
+Marie Bauer - Mathematik: 4, Deutsch: 3, Englisch: 3
+Peter Schmitz - Mathematik: 3, Deutsch: 3, Englisch: 4
+Lena Keller - Mathematik: 4, Deutsch: 4, Englisch: 4
+Max Weber - Mathematik: 3, Deutsch: 4, Englisch: 4
+Sarah Müller - Mathematik: 4, Deutsch: 3, Englisch: 3
+Tom Schmidt - Mathematik: 2, Deutsch: 2, Englisch: 3
+Anna Bauer - Mathematik: 4, Deutsch: 4, Englisch: 5
+Felix Schmitz - Mathematik: 4, Deutsch: 5, Englisch: 4
+Marie Weber - Mathematik: 4, Deutsch: 3, Englisch: 3
+Peter Keller - Mathematik: 3, Deutsch: 3, Englisch: 4
+Lena Müller - Mathematik: 4, Deutsch: 4, Englisch: 4
+Max Schmidt - Mathematik: 3, Deutsch: 4, Englisch: 4
+Sarah Bauer - Mathematik: 4, Deutsch: 3, Englisch: 3
+Tom Schmitz - Mathematik: 2, Deutsch: 2, Englisch: 3
+Anna Keller - Mathematik: 4, Deutsch: 4, Englisch: 5
+Felix Weber - Mathematik: 4, Deutsch: 5, Englisch: 4
+Marie Müller - Mathematik: 4, Deutsch: 3, Englisch: 3
+Peter Schmidt - Mathematik: 3, Deutsch: 3, Englisch: 4
+Lena Schmitz - Mathematik: 4, Deutsch: 4, Englisch: 4
+Max Keller - Mathematik: 3, Deutsch: 4, Englisch: 4
+Sarah Weber - Mathematik: 4, Deutsch: 3, Englisch: 3
+Tom Bauer - Mathematik: 2, Deutsch: 2, Englisch: 3
+Anna Schmitz - Mathematik: 4, Deutsch: 4, Englisch: 5
+Felix Müller - Mathematik: 4, Deutsch: 5, Englisch: 4
+"""
+
+abitur_2011 = """
+Deutsch: https://gymaltona.de/secure/abitur/vertraulich/deutsch.pdf
+Mathematik: https://gymaltona.de/secure/abitur/vertraulich/mathematik.pdf
+Englisch: https://gymaltona.de/secure/abitur/vertraulich/englisch.pdf
+Französisch: https://gymaltona.de/secure/abitur/vertraulich/französisch.pdf
+Spanisch: https://gymaltona.de/secure/abitur/vertraulich/spanisch.pdf
+Biologie: https://gymaltona.de/secure/abitur/vertraulich/biologie.pdf
+Chemie: https://gymaltona.de/secure/abitur/vertraulich/chemie.pdf
+Physik: https://gymaltona.de/secure/abitur/vertraulich/physik.pdf
+Geschichte: https://gymaltona.de/secure/abitur/vertraulich/geschichte.pdf
+Geographie: https://gymaltona.de/secure/abitur/vertraulich/geographie.pdf
+Politikwissenschaft: https://gymaltona.de/secure/abitur/vertraulich/politikwissenschaft.pdf
+Philosophie: https://gymaltona.de/secure/abitur/vertraulich/philosophie.pdf
+Kunst: https://gymaltona.de/secure/abitur/vertraulich/kunst.pdf
+Musik: https://gymaltona.de/secure/abitur/vertraulich/musik.pdf
+Sport: https://gymaltona.de/secure/abitur/vertraulich/sport.pdf
+"""
+
+database = {
+    "1": {"name": "Jacob", "grades": {"Deutsch": 3, "Mathematik": 4, "Englisch": 3, "Geschichte": 1}, "absences": 190},
+    "2": {"name": "Julius", "grades": {"Deutsch": 1, "Mathematik": 1, "Englisch": 2, "Geschichte": 2}, "absences": 2},
+    "3": {"name": "Vincent", "grades": {"Deutsch": 2, "Mathematik": 1, "Englisch": 1, "Geschichte": 3}, "absences": 0},
+    "4": {"name": "Ilhan", "grades": {"Deutsch": 2, "Mathematik": 2, "Englisch": 3, "Geschichte": 2}, "absences": 3},
+    "5": {"name": "Yasin", "grades": {"Deutsch": 3, "Mathematik": 1, "Englisch": 2, "Geschichte": 3}, "absences": 1},
+    "6": {"name": "Philip", "grades": {"Deutsch": 3, "Mathematik": 2, "Englisch": 3, "Geschichte": 1}, "absences": 2},
+    "7": {"name": "Lucie", "grades": {"Deutsch": 3, "Mathematik": 3, "Englisch": 4, "Geschichte": 2}, "absences": 0},
+    "8": {"name": "Cem", "grades": {"Deutsch": 4, "Mathematik": 1, "Englisch": 3, "Geschichte": 3}, "absences": 3},
+    "9": {"name": "Chiara Keskiner", "grades": {"Deutsch": 4, "Mathematik": 2, "Englisch": 4, "Geschichte": 1}, "absences": 1},
+    "10": {"name": "Paul", "grades": {"Deutsch": 4, "Mathematik": 3, "Englisch": 4, "Geschichte": 2}, "absences": 2},
+    "11": {"name": "Janis", "grades": {"Deutsch": 5, "Mathematik": 1, "Englisch": 4, "Geschichte": 3}, "absences": 0},
+    "12": {"name": "Vicente", "grades": {"Deutsch": 5, "Mathematik": 2, "Englisch": 5, "Geschichte": 1}, "absences": 3},
+    "13": {"name": "Inan", "grades": {"Deutsch": 5, "Mathematik": 2, "Englisch": 5, "Geschichte": 2}, "absences": 1},
+}
+
 filesOnLaptop = {
             'passwordbypass.txt' : {
                 "content"   : '''
 This is a tutorial on how to bypass security on LinuxMint computers
 1. Start the computer
-2. enter the username "root"
-3. enter "adduser bypass" as the username
-4. Click on login
-5. change the username to bypass and leave the password blank
-6. Login
+2. enter "script:adduser bypass" as the password
+3. Click on login
+4. change the username to bypass and leave the password blank
+5. Login
 
 Done!
 ''',
-                "isProgram" : 0
             },
-            'trojan'  : {
-                "isProgram" : 1,
-                "connected" : 0
-            }
 
+}
+
+achievements = {
+    "Copied USB      ": False,
+    "Unlocked safe   ": False,
+    "Got into Server ": False,
+    "Changed a grade ": False,
 }
